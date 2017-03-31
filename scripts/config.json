@@ -1,7 +1,7 @@
 {
     "config": {
         "map": {
-            "css": "core/systemjs-plugin-css.js",
+            "css": "../base/scripts/systemjs-plugin-css.js",
             "angular": "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js",
             "angular-sanitize": "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-sanitize.min.js",
             "angular-ui-router": "https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0-rc.1/angular-ui-router.min.js",
@@ -31,11 +31,14 @@
                 "exports": "ga"
             },
             "appBuilder": {
-                "deps": [ "angular-sanitize" ]
+                "deps": [
+                    "angular-sanitize",
+                    "base/scripts/baseAppComponents.js"
+                ]
             }
         }
     },
-    "builderInvokerDeps":[
+    "builderInvokerDeps": [
         "angular"
     ],
     "angular": {
