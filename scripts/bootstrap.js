@@ -18,10 +18,10 @@
 
     SystemJS.registerDynamic("bootstrap", [
         "base/scripts/config.json",
-        "app/config.json"
+        "config.json"
     ], true, function(require, exports, module) {
         const coreConfig = require("base/scripts/config.json");
-        const appConfig = require("app/config.json");
+        const appConfig = require("config.json");
 
         if (appConfig.styles)
             appConfig.styles.forEach(function(css) {
