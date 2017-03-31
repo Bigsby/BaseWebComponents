@@ -72,7 +72,8 @@
             SystemJS.import("appBuilder").then(function(appBuilder) {
                 const app = angular.module(coreConfig.angularAppName, coreConfig.angular.modules);
 
-                const RegisterBaseComponents = require("");
+                const RegisterBaseComponents = require("baseAppComponents");
+                RegisterBaseComponents(app);
                 app.value("data", data);
 
                 if (appConfig.ga)
