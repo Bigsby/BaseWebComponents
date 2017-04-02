@@ -26,7 +26,7 @@ module.exports = function (app) {
         };
     }]);
 
-    app.directive("codeHighlight", ["$compile", function ($http) {
+    app.directive("codeHighlight", ["$http", "$compile", function ($http, $compile) {
         return {
             restrict: "E",
             link: function ($scope, element, attrs) {
