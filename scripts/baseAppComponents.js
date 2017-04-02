@@ -1,5 +1,5 @@
-module.exports = function(app) {
-    app.directive("url", function() {
+module.exports = function (app) {
+    app.directive("url", function () {
         return {
             restrict: "E",
             link: function link(scope, element, attrs) {
@@ -8,13 +8,13 @@ module.exports = function(app) {
         };
     });
 
-    app.directive('bindHtmlCompile', ['$compile', function($compile) {
+    app.directive('bindHtmlCompile', ['$compile', function ($compile) {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
-                scope.$watch(function() {
+            link: function (scope, element, attrs) {
+                scope.$watch(function () {
                     return scope.$eval(attrs.bindHtmlCompile);
-                }, function(value) {
+                }, function (value) {
                     element.html(value && value.toString());
                     var compileScope = scope;
                     if (attrs.bindHtmlScope) {
@@ -26,7 +26,7 @@ module.exports = function(app) {
         };
     }]);
 
-    app.directive("codeHighlight", function ($http) {
+    app.directive("codeHighlight", ["$compile", function ($http) {
         return {
             restrict: "E",
             link: function ($scope, element, attrs) {
@@ -54,18 +54,37 @@ module.exports = function(app) {
 
                 }
                 else {
+                    if (!attrs.code)
+                        $scope.$watch(
+                            function (scope) {
+                                return scope.$eval(attrs.compile);
+                            },
+                            function (value) {
+                                element.html(value);
+                                $compile(element.contents())($scope);
+                            }
+                        );
                     code.textContent = attrs.code || element.text();
                     hljs.highlightBlock(code);
                     element.html(pre.outerHTML);
                 }
             }
         }
-    });
+    }]);
 
-    app.directive("output", function(){
+    app.directive("output", ["$compile", function ($compile) {
         return {
             restrict: "E",
-            link: function($scope, element, attrs){
+            link: function ($scope, element, attrs) {
+                $scope.$watch(
+                    function (scope) {
+                        return scope.$eval(attrs.compile);
+                    },
+                    function (value) {
+                        element.html(value);
+                        $compile(element.contents())($scope);
+                    }
+                );
                 var pre = document.createElement("pre");
                 pre.className = "output";
                 var code = document.createElement("code");
@@ -74,5 +93,5 @@ module.exports = function(app) {
                 element.html(pre.outerHTML);
             }
         }
-    });
+    }]);
 };
