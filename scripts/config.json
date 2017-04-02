@@ -6,8 +6,14 @@
             "angular-sanitize": "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-sanitize.min.js",
             "angular-ui-router": "https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.0-rc.1/angular-ui-router.min.js",
             "ga": "https://www.google-analytics.com/analytics.js",
+            "hljs": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0",
             "baseAppComponents": "../base/scripts/baseAppComponents.js",
             "appBuilder": "appBuilder.js"
+        },
+        "packages": {
+            "hljs": {
+                "main": "highlight.min.js"
+            }
         },
         "paths": {
             "styles": "../styles"
@@ -37,6 +43,10 @@
                 ]
             }
         }
+    },
+    "styles":{
+        "font-awesome": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css",
+        "highlightjs": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/tomorrow.min.css"
     },
     "builderInvokerDeps": [
         "angular",

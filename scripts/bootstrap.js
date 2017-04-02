@@ -1,5 +1,5 @@
 "use strict";
-(function() {
+(function () {
     SystemJS.config({
         "baseURL": "/scripts",
         "map": {
@@ -19,13 +19,16 @@
     SystemJS.registerDynamic("bootstrap", [
         "base/scripts/config.json",
         "config.json"
-    ], true, function(require, exports, module) {
+    ], true, function (require, exports, module) {
         const coreConfig = require("base/scripts/config.json");
         const appConfig = require("config.json");
 
         if (appConfig.styles)
-            appConfig.styles.forEach(function(css) {
-                SystemJS.import(css);
+            appConfig.styles.forEach(function (css) {
+                var styleToLoad = css;
+                if (coreConfig.styles[css])
+                    styleToLoad = coreConfig.styles[css];
+                SystemJS.import(styleToLoad);
             });
 
         var appBuilderDeps = coreConfig.config.meta.appBuilder.deps;
@@ -50,26 +53,27 @@
 
         const builderInvokerDeps = coreConfig.builderInvokerDeps;
         if (appConfig.initialData)
-            appConfig.initialData.forEach(function(file) {
+            appConfig.initialData.forEach(function (file) {
                 const map = "data-" + file;
                 coreConfig.config.map[map] = "data/" + file + ".json";
                 builderInvokerDeps.push(map);
             });
 
         SystemJS.config(coreConfig.config);
-        SystemJS.config(appConfig.config);
+        if (appConfig.config)
+            SystemJS.config(appConfig.config);
 
-        SystemJS.registerDynamic("builderInvoker", builderInvokerDeps, true, function(require, exports, module) {
+        SystemJS.registerDynamic("builderInvoker", builderInvokerDeps, true, function (require, exports, module) {
             const data = {};
 
             if (appConfig.initialData && appConfig.initialData.length) {
-                appConfig.initialData.forEach(function(file) {
+                appConfig.initialData.forEach(function (file) {
                     var content = require("data-" + file);
                     data[file] = content;
                 });
             }
 
-            SystemJS.import("appBuilder").then(function(appBuilder) {
+            SystemJS.import("appBuilder").then(function (appBuilder) {
                 const app = angular.module(coreConfig.angularAppName, coreConfig.angular.modules);
 
                 const RegisterBaseComponents = require("baseAppComponents");
@@ -77,21 +81,21 @@
                 app.value("data", data);
 
                 if (appConfig.ga)
-                    app.run(function($window, $transitions, $location) {
+                    app.run(function ($window, $transitions, $location) {
                         $window.ga("create", appConfig.ga, "auto");
                         $transitions.onSuccess({}, () => {
                             $window.ga("send", "pageview", $location.path());
                         });
                     });
 
-                window.templatePath = function(name) {
+                window.templatePath = function (name) {
                     return "templates/" + name + ".html";
                 };
 
                 if (appBuilder.RegisterComponents && typeof appBuilder.RegisterComponents === "function")
                     appBuilder.RegisterComponents(app);
 
-                app.config(coreConfig.angular.configComponents.concat([function($httpProvider, $sceProvider, $stateProvider, $urlRouterProvider) {
+                app.config(coreConfig.angular.configComponents.concat([function ($httpProvider, $sceProvider, $stateProvider, $urlRouterProvider) {
                     $httpProvider.defaults.useXDomain = true;
                     $sceProvider.enabled(false);
 

@@ -189,6 +189,23 @@ input[type=color]{
     align-content: center;
 }
 
+code-highlight > pre, .output{
+    white-space: pre-wrap;
+    overflow-x: auto;
+    border: 3px solid #506080;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+@media only screen and (max-width: 767px) {
+    code-highlight, .output {
+        white-space: nowrap;
+        overflow-x: auto;
+    }
+}
+
+
+
 .loader,
 .loader:before,
 .loader:after {

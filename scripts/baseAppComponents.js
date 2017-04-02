@@ -25,4 +25,54 @@ module.exports = function(app) {
             }
         };
     }]);
+
+    app.directive("codeHighlight", function ($http) {
+        return {
+            restrict: "E",
+            link: function ($scope, element, attrs) {
+                var pre = document.createElement("pre");
+                if (attrs.linenumbers && attrs.linenumbers != "false")
+                    pre.className = "line-numbers";
+                var code = document.createElement("code");
+                code.className = attrs.hljs;
+                pre.appendChild(code);
+
+                if (attrs.src) {
+                    element.html("<br/><img src=\"base/images/loading.gif\"/>");
+
+                    $http.get(attrs.src)
+                        .then(function (response) {
+                            element.html("");
+                            code.textContent = response.data;
+                            try {
+                                hljs.highlightBlock(code);
+                            } catch (error) {
+                                console.log(error);
+                            }
+                            element.html(pre.outerHTML);
+                        });
+
+                }
+                else {
+                    code.textContent = attrs.code || element.text();
+                    hljs.highlightBlock(code);
+                    element.html(pre.outerHTML);
+                }
+            }
+        }
+    });
+
+    app.directive("output", function(){
+        return {
+            restrict: "E",
+            link: function($scope, element, attrs){
+                var pre = document.createElement("pre");
+                pre.className = "output";
+                var code = document.createElement("code");
+                code.textContent = element.text();
+                pre.appendChild(code);
+                element.html(pre.outerHTML);
+            }
+        }
+    });
 };
