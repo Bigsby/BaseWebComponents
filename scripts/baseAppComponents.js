@@ -94,4 +94,62 @@ module.exports = function (app) {
             }
         }
     }]);
+
+    app.factory("baseHelper", [function () {
+        function templatePath(path) {
+            return "templates/" + path + ".html";
+        }
+    }]);
+
+    function metaProvider($document, options) {
+        const headElement = $document.find("head");
+        const head = headElement[0];
+        this.titlePrefix = options.titlePrefix;
+        this.titleSufix = options.titleSufix || "Bigsby";
+        this.titleSeperator = options.titleSeperator || " | ";
+
+        function setMeta(name, value) {
+            var find = head.querySelectorAll("meta[name=" + name + "]");
+            var element = find.length ? find[0] : document.createElement("meta");
+            if (!find.length)
+                head.appendChild(element);
+            
+            element.name = name;
+            element.content = value;
+        };
+
+        function setTitle(value) {
+            var titleElement = headElement.find("title");
+            if (!titleElement) {
+                titleElement = angular.element("<title/>");
+                head.appendChild(titleElement);
+            }
+            titleElement.text(value);
+        }
+
+        this.set = function (meta) {
+            if (!meta) return;
+
+            if (meta.title)
+                setTitle([this.titlePrefix, meta.title, this.titleSufix].join(this.titleSeperator));
+            else
+                setTitle([this.titlePrefix, this.titleSufix].join(this.titleSeperator));
+
+            for (var property in meta) {
+                if (property != "title")
+                    setMeta(property, meta[property]);
+            }
+        };
+    }
+
+    app.provider("metadata", function () {
+        var me = this;
+
+        this.$get = ["$document", function ($document) {
+            var provider = new metaProvider($document, me);
+            if (me.properties)
+                provider.set(me.properties);
+            return provider;
+        }];
+    });
 };

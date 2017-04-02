@@ -38,6 +38,7 @@
             coreConfig.angular.modules.push("ui.router");
             coreConfig.angular.configComponents.push("$stateProvider");
             coreConfig.angular.configComponents.push("$urlRouterProvider");
+            coreConfig.angular.configComponents.push("metadataProvider");
         }
 
         if (appConfig.ga)
@@ -74,6 +75,7 @@
             }
 
             SystemJS.import("appBuilder").then(function (appBuilder) {
+
                 const app = angular.module(coreConfig.angularAppName, coreConfig.angular.modules);
 
                 const RegisterBaseComponents = require("baseAppComponents");
@@ -95,7 +97,7 @@
                 if (appBuilder.RegisterComponents && typeof appBuilder.RegisterComponents === "function")
                     appBuilder.RegisterComponents(app);
 
-                app.config(coreConfig.angular.configComponents.concat([function ($httpProvider, $sceProvider, $stateProvider, $urlRouterProvider) {
+                app.config(coreConfig.angular.configComponents.concat([function ($httpProvider, $sceProvider, $stateProvider, $urlRouterProvider, metadata) {
                     $httpProvider.defaults.useXDomain = true;
                     $sceProvider.enabled(false);
 
@@ -105,6 +107,13 @@
 
                     if ($urlRouterProvider)
                         $urlRouterProvider.otherwise("/");
+
+                    
+
+                    if (metadata){
+                        angular.extend(coreConfig.metadata, appConfig.metadata || {});
+                        angular.extend(metadata, coreConfig.metadata);
+                    }
                 }]));
 
                 angular.bootstrap(document, [coreConfig.angularAppName]);

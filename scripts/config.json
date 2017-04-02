@@ -61,5 +61,12 @@
             "$sceProvider"
         ]
     },
-    "angularAppName": "bigsbyApp"
+    "angularAppName": "bigsbyApp",
+    "metadata":{
+        "titleSuffix": "Bigsby",
+        "properties":{
+            "author": "Bigsby",
+            "copyright": "@ 2017 Bigsby"
+        }
+    }
 }
