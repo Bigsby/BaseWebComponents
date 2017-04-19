@@ -95,7 +95,7 @@
                 };
 
                 if (appBuilder.RegisterComponents && typeof appBuilder.RegisterComponents === "function")
-                    appBuilder.RegisterComponents(app);
+                    appBuilder.RegisterComponents(app, data);
 
                 app.config(coreConfig.angular.configComponents.concat([function ($httpProvider, $sceProvider, $stateProvider, $urlRouterProvider, metadata) {
                     $httpProvider.defaults.useXDomain = true;
@@ -103,7 +103,7 @@
 
                     if ($stateProvider &&
                         appBuilder.RegisterStates && typeof appBuilder.RegisterStates === "function")
-                        appBuilder.RegisterStates($stateProvider);
+                        appBuilder.RegisterStates($stateProvider, data);
 
                     if ($urlRouterProvider)
                         $urlRouterProvider.otherwise("/");
