@@ -59,6 +59,13 @@ footer{
 .innerContent{
     max-width: 800px;
     margin: 0 auto;
+    min-width: 800px;
+}
+
+@media only screen and (max-width: 767px) {
+    .innerContent {
+        min-width: 280px;
+    }
 }
 
 .innerContent > *:last-child{
