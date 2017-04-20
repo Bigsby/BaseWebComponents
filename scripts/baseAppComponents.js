@@ -3,7 +3,8 @@ module.exports = function (app) {
         return {
             restrict: "E",
             link: function link(scope, element, attrs) {
-                element[0].outerHTML = "<a target='_blank' href='" + (attrs.href || attrs.link) + "'>" + (attrs.text || element.text() || attrs.link) + "</a>";
+                var link = attrs.href || attrs.link;
+                element[0].outerHTML = "<a target='_blank' href='" + link + "'>" + (attrs.text || element.html() || link) + "</a>";
             }
         };
     });
